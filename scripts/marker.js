@@ -11,10 +11,12 @@ class Marker {
 
     this.isAnimating = false;
     this.isHovered = false;
+    this.isClicked = false;
 
     this.textColor = textColor;
     this.pointColor = new THREE.Color(pointColor);
     this.glowColor = new THREE.Color(glowColor);
+    this.clickedColor = new THREE.Color('rgb(255, 215, 0)'); // Gold color for clicked state
 
     this.group = new THREE.Group();
     this.group.name = 'Marker';
@@ -110,6 +112,29 @@ class Marker {
 
   setHovered(hovered) {
     this.isHovered = hovered;
-    this.label.visible = hovered;
+    this.label.visible = hovered || this.isClicked;
+    
+    // Update point color based on state
+    if (this.isClicked) {
+      this.point.material.color.copy(this.clickedColor);
+    } else if (hovered) {
+      this.point.material.color.copy(this.glowColor);
+    } else {
+      this.point.material.color.copy(this.pointColor);
+    }
+  }
+
+  setClicked(clicked) {
+    this.isClicked = clicked;
+    this.label.visible = clicked || this.isHovered;
+    
+    // Update point color based on state
+    if (clicked) {
+      this.point.material.color.copy(this.clickedColor);
+    } else if (this.isHovered) {
+      this.point.material.color.copy(this.glowColor);
+    } else {
+      this.point.material.color.copy(this.pointColor);
+    }
   }
 }

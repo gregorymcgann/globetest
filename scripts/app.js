@@ -4,6 +4,7 @@ class App {
     this.animate = animate;
     this.setup = setup;
     window.app = this;
+    this.clickedMarker = null;
   }
 
   init = async () => {
@@ -13,6 +14,7 @@ class App {
     this.initControls();
     this.initStats();
     this.initRaycaster();
+    this.initClickHandler();
 
     if(this.preload) {
       await this.preload();
@@ -64,6 +66,45 @@ class App {
     window.addEventListener('mousemove', (event) => {
       this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
       this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    });
+  }
+
+  initClickHandler = () => {
+    window.addEventListener('click', (event) => {
+      this.raycaster.setFromCamera(this.mouse, this.camera);
+      const intersects = this.raycaster.intersectObjects(groups.markers.children, true);
+
+      if (intersects.length) {
+        // If we clicked on a marker
+        const marker = intersects[0].object.parent.userData.marker;
+        if (marker) {
+          // If we click the same marker that's already clicked, unclick it
+          if (this.clickedMarker === marker) {
+            marker.setClicked(false);
+            this.clickedMarker = null;
+            animations.rotateGlobe = true;
+          } else {
+            // If there was a previously clicked marker, unclick it
+            if (this.clickedMarker) {
+              this.clickedMarker.setClicked(false);
+            }
+            // Click the new marker
+            marker.setClicked(true);
+            this.clickedMarker = marker;
+            animations.rotateGlobe = false;
+          }
+          return;
+        }
+      }
+
+      // If we clicked anywhere else (except UI elements)
+      if (event.target === this.renderer.domElement) {
+        if (this.clickedMarker) {
+          this.clickedMarker.setClicked(false);
+          this.clickedMarker = null;
+        }
+        animations.rotateGlobe = true;
+      }
     });
   }
 
