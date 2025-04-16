@@ -12,7 +12,6 @@ class App {
     this.initRenderer();
     this.initCamera();
     this.initControls();
-    this.initStats();
     this.initRaycaster();
     this.initClickHandler();
 
@@ -46,15 +45,6 @@ class App {
 
   initControls = () => {
     this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
-  }
-
-  initStats = () => {
-    this.stats = new Stats();
-    this.stats.setMode(0);
-    this.stats.domElement.style.position = 'absolute';
-    this.stats.domElement.style.right = '10px';
-    this.stats.domElement.style.bottom = '10px';
-    document.body.appendChild( this.stats.domElement );
   }
 
   initRaycaster = () => {
@@ -135,7 +125,6 @@ class App {
 
   update = () => {
     this.animate(this);
-    this.stats.update();
     this.controls.update();
     this.checkIntersects();
     this.renderer.render(this.scene, this.camera);
