@@ -27,7 +27,7 @@ const config = {
 		map: true,
 		lines: true,
 		markers: true,
-		markerLabel: true,
+		markerLabel: false,
 		markerPoint: true
 	},
 	dots: {

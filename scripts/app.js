@@ -12,6 +12,7 @@ class App {
     this.initCamera();
     this.initControls();
     this.initStats();
+    this.initRaycaster();
 
     if(this.preload) {
       await this.preload();
@@ -54,6 +55,38 @@ class App {
     document.body.appendChild( this.stats.domElement );
   }
 
+  initRaycaster = () => {
+    this.raycaster = new THREE.Raycaster();
+    this.mouse = new THREE.Vector2();
+    this.hoveredMarker = null;
+
+    // Add mouse move listener
+    window.addEventListener('mousemove', (event) => {
+      this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    });
+  }
+
+  checkIntersects = () => {
+    this.raycaster.setFromCamera(this.mouse, this.camera);
+    const intersects = this.raycaster.intersectObjects(groups.markers.children, true);
+
+    // If we were hovering over something before, unhover it
+    if (this.hoveredMarker && (!intersects.length || intersects[0].object.parent.userData.marker !== this.hoveredMarker)) {
+      this.hoveredMarker.setHovered(false);
+      this.hoveredMarker = null;
+    }
+
+    // If we're now hovering over something new
+    if (intersects.length) {
+      const marker = intersects[0].object.parent.userData.marker;
+      if (marker && marker !== this.hoveredMarker) {
+        this.hoveredMarker = marker;
+        marker.setHovered(true);
+      }
+    }
+  }
+
   render = () => {
     this.setup(this);
     document.body.appendChild(this.renderer.domElement);
@@ -63,6 +96,7 @@ class App {
     this.animate(this);
     this.stats.update();
     this.controls.update();
+    this.checkIntersects();
     this.renderer.render(this.scene, this.camera);
     requestAnimationFrame(this.update);
   }

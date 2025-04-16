@@ -10,6 +10,7 @@ class Marker {
     this.cords = cords;
 
     this.isAnimating = false;
+    this.isHovered = false;
 
     this.textColor = textColor;
     this.pointColor = new THREE.Color(pointColor);
@@ -22,6 +23,13 @@ class Marker {
     this.createPoint();
     this.createGlow();
     this.setPosition();
+
+    // Initially hide the label
+    this.label.visible = false;
+
+    // Add hover detection
+    this.group.userData.marker = this;
+    this.group.userData.type = 'marker';
 
     groups.markers.add(this.group);
   }
@@ -98,5 +106,10 @@ class Marker {
 
     canvas.add(text);
     return element;
+  }
+
+  setHovered(hovered) {
+    this.isHovered = hovered;
+    this.label.visible = hovered;
   }
 }
