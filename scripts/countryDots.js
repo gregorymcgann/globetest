@@ -10,8 +10,10 @@ class CountryDots {
       this.geometry = new THREE.SphereGeometry(config.countryDots.size, 32, 32);
       this.material = new THREE.MeshBasicMaterial({
         color: config.countryDots.color,
-        transparent: true,
-        opacity: config.countryDots.opacity
+        transparent: false,
+        opacity: 1.0,
+        depthWrite: true,
+        depthTest: true
       });
   
       this.create();
@@ -65,10 +67,5 @@ class CountryDots {
     setPosition() {
       const {x, y, z} = this.coords;
       this.mesh.position.set(-x, y, -z);
-    }
-  
-    animate() {
-      // Add subtle floating animation
-      this.mesh.position.y += Math.sin(Date.now() * 0.002) * 0.01;
     }
   }

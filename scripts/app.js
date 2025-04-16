@@ -60,6 +60,10 @@ class App {
   }
 
   initClickHandler = () => {
+    const infoPanel = document.querySelector('.country-info-panel');
+    const countryName = document.querySelector('#country-name');
+    const countryInfo = document.querySelector('#country-info');
+
     window.addEventListener('click', (event) => {
       this.raycaster.setFromCamera(this.mouse, this.camera);
       const intersects = this.raycaster.intersectObjects(groups.markers.children, true);
@@ -73,6 +77,7 @@ class App {
             marker.setClicked(false);
             this.clickedMarker = null;
             animations.rotateGlobe = true;
+            infoPanel.classList.remove('visible');
           } else {
             // If there was a previously clicked marker, unclick it
             if (this.clickedMarker) {
@@ -82,6 +87,10 @@ class App {
             marker.setClicked(true);
             this.clickedMarker = marker;
             animations.rotateGlobe = false;
+            
+            // Update and show the info panel
+            countryName.textContent = marker.labelText;
+            infoPanel.classList.add('visible');
           }
           return;
         }
@@ -94,6 +103,7 @@ class App {
           this.clickedMarker = null;
         }
         animations.rotateGlobe = true;
+        infoPanel.classList.remove('visible');
       }
     });
   }

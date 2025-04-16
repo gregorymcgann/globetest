@@ -44,3 +44,33 @@ canvas {
 	left: 50%;
 	top: -50%;
 }
+
+.country-info-panel {
+  position: fixed;
+  right: 30px;
+  top: 30px;
+  width: 300px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  display: none;
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  font-family: 'Open Sans', sans-serif;
+}
+
+.country-info-panel.visible {
+  display: block;
+}
+
+.country-info-panel h2 {
+  margin: 0 0 15px 0;
+  font-size: 24px;
+}
+
+.country-info-panel p {
+  margin: 0;
+  line-height: 1.5;
+  font-size: 14px;
+}

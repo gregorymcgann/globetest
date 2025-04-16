@@ -36,7 +36,6 @@ const config = {
 	countryDots: {
 		size: 2,
 		color: 'rgb(255, 255, 255)',
-		opacity: 0.8,
 		total: 1 // dots per country
 	}
 }

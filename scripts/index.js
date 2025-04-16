@@ -105,11 +105,5 @@ function animate(app) {
   if(animations.rotateGlobe) {
     groups.globe.rotation.y -= 0.001;
   }
-
-  if (elements.countryDots) {
-    elements.countryDots.forEach(dot => {
-      dot.animate();
-    });
-  }
 }
 
