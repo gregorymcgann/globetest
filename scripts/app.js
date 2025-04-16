@@ -67,11 +67,6 @@ class App {
     requestAnimationFrame(this.update);
   }
 
-  addControlGui = callback => {
-    var gui = new dat.GUI();
-    callback(gui);
-  }
-
   handleResize = () => {
     this.camera.aspect = window.innerWidth / window.innerHeight;
     this.camera.updateProjectionMatrix();

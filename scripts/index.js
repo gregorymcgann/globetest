@@ -4,74 +4,20 @@ window.onload = app.init;
 window.onresize = app.handleResize;
 
 const loader = new THREE.TextureLoader();
-const controls = {}
+const controls = {
+  changed: true // Set to true initially to apply default settings
+}
 const data = {}
-
 
 async function preload() {
   try {
-    // const gridUrl = '../assets/data/grid.json';
-    // const gridRes = await fetch(gridUrl);
-    // const grid = await gridRes.json();
-    // data.grid = grid;
-
-    // const countryUrl = '../assets/data/countries.json';
-    // const countryRes = await fetch(countryUrl);
-    // const countries = await countryRes.json();
-    // data.countries = countries;
-
-    // const connectionsUrl = '../assets/data/connections.json';
-    // const connectionsRes = await fetch(connectionsUrl);
-    // const connections = await connectionsRes.json();
-    // data.connections = getCountries(connections, countries);    
-
     return true;
   } catch(error) {
     console.log(error);
   }
 }
 
-
 function setup(app) {
-  const controllers = [];
-
-  app.addControlGui(gui => {
-    const colorFolder = gui.addFolder('Colors');
-    controllers.push(colorFolder.addColor(config.colors, 'globeDotColor'))
-    controllers.push(colorFolder.addColor(config.colors, 'globeMarkerColor'))
-    controllers.push(colorFolder.addColor(config.colors, 'globeMarkerGlow'))
-    controllers.push(colorFolder.addColor(config.colors, 'globeLines'))
-    controllers.push(colorFolder.addColor(config.colors, 'globeLinesDots'))
-    
-    const sizeFolder = gui.addFolder('Sizes')
-    controllers.push(sizeFolder.add(config.sizes, 'globeDotSize', 1, 5))
-    controllers.push(sizeFolder.add(config.scale, 'globeScale', 0.1, 1))
-    
-    const displayFolder = gui.addFolder('Display');
-    controllers.push(displayFolder.add(config.display, 'map'))
-    controllers.push(displayFolder.add(config.display, 'points'))
-    controllers.push(displayFolder.add(config.display, 'markers'))
-    controllers.push(displayFolder.add(config.display, 'markerLabel'))
-    controllers.push(displayFolder.add(config.display, 'markerPoint'))
-    
-    const animationsFolder = gui.addFolder('Animations');
-    controllers.push(animationsFolder.add(animations, 'rotateGlobe'))
-
-    const countryDotsFolder = gui.addFolder('Country Dots');
-    controllers.push(countryDotsFolder.add(config.countryDots, 'total', 1, 5).step(1));
-    controllers.push(countryDotsFolder.addColor(config.countryDots, 'color'));
-    controllers.push(countryDotsFolder.add(config.countryDots, 'opacity', 0, 1));
-    controllers.push(countryDotsFolder.add(config.countryDots, 'size', 1, 5));
-    
-    sizeFolder.open();
-  });
-
-  controllers.forEach(controller => {
-    controller.onChange((event) => {
-      controls.changed = true;
-    })
-  })
-
   app.camera.position.z = config.sizes.globe * 2.85;
   app.camera.position.y = config.sizes.globe * 0;
   app.controls.enableDamping = true;
@@ -98,7 +44,6 @@ function setup(app) {
 
   app.scene.add(groups.main);
 }
-
 
 function animate(app) {
   if(controls.changed) {
@@ -138,8 +83,6 @@ function animate(app) {
 
     controls.changed = false
   }
-
-
 
   if(elements.lineDots) {
     for(let i = 0; i < elements.lineDots.length; i++) {
